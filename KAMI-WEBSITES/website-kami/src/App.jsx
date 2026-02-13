@@ -1,11 +1,13 @@
 import ColorBends from './assets/components/ColorBends.jsx';
+import Header from './assets/components/Header.jsx'
 import './App.css'
 import React from 'react';
 
 function App() {
     return(
     <div className="w-screen h-screen relative overflow-hidden bg-black">
-          <ColorBends
+        <Header className="relative"/>
+          <ColorBends className="fixed inset-0"
               colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
               rotation={0}
               speed={0.2}
