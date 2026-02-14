@@ -1,27 +1,48 @@
-import React from "react";
-import { useState } from "react"; //biblioteca que avisa ao react que o estado de algum componente mudou, 
-// por exemplo, tenho um botão e quero que quando apertar nele ele exiba algo na tela
+import React, { useState } from "react";
+import Logo from "../images/logo.png";
 
-function Header(){
-    const [isOpen, setIsOpen] = useState(false);
+function Header() {
+  const [isOpen, setIsOpen] = useState(false);
 
-        return(
-            <nav className="fixed top-0 left-0 w-full bg-transparent p-6 z-50 text-white">
-                <div className="flex-col items-center justify-start">
-                {/* botão hamburger: para celular */}
-                <div className="w-auto h-auto md:hidden">
-                    <button onClick={() => setIsOpen(!isOpen)} class="text-2xl relative z-[60]">{isOpen ? '✕' : '☰'}</button>
-                </div>
-                <ul className={`${isOpen ? 'block' : 'hidden'} md:flex md:flex-row 
-                    w-auto h-auto md:w-auto space-y-2 md:space-y-0 md:space-x-15 
-                    p-4 md:p-0 md:justify-center`}>
-                    <li><a href="#">about</a></li>
-                    <li><a href="#">contact</a></li>
-                    <li><a href="#">portfolio</a></li>
-                </ul>
-                </div>
-            </nav>
+  return (
+    <nav className="fixed top-0 left-0 w-full z-50 text-white">
+      <div className="flex items-start justify-between md:justify-center px-6 py-6 md:border-b md:border-gray-300/20 h-auto">
 
-    );
+        {/* BOTÃO MOBILE */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex overflow-y-hidden items-start text-3xl md:hidden z-50"
+        >
+          {isOpen ? "✕" : "☰"}
+        </button>
+
+        {/* MENU */}
+        <ul
+          className={`
+            ${isOpen ? "flex" : "hidden"}
+            flex-col items-start justify-center
+            absolute top-15 left-10 w-auto h-auto
+            gap-4 text-xl
+
+            md:static md:flex md:flex-row md:h-auto md:bg-transparent
+            md:gap-12 md:text-base
+          `}
+        >
+          <li><a href="#" onClick={() => setIsOpen(false)}>about</a></li>
+          <li><a href="#" onClick={() => setIsOpen(false)}>contact</a></li>
+          <li><a href="#" onClick={() => setIsOpen(false)}>portfolio</a></li>
+        </ul>
+
+        {/* LOGO */}
+        <img
+          src={Logo}
+          alt="logo"
+          className="w-10 md:absolute md:left-10 md:top-4"
+        />
+
+      </div>
+    </nav>
+  );
 }
-export default Header
+
+export default Header;
