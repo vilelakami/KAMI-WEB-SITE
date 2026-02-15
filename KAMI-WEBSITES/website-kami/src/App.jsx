@@ -1,5 +1,6 @@
 import ColorBends from './assets/components/ColorBends.jsx';
 import Header from './assets/components/Header.jsx'
+import CTA from './assets/components/call-to-action.jsx';
 import './App.css'
 import React from 'react';
 
@@ -21,6 +22,7 @@ function App() {
               autoRotate={0}
               color=""
            />
+           <CTA className="relative"/>
     </div>
     );
 }
