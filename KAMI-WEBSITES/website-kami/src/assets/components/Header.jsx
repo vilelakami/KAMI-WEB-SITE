@@ -22,15 +22,15 @@ function Header() {
             ${isOpen ? "flex" : "hidden"}
             flex-col items-start justify-center
             absolute top-15 left-10 w-auto h-auto
-            gap-4 text-xl text-shadow-lg/30
+            gap-4 text-xl text-shadow-lg/30 
 
             md:static md:flex md:flex-row md:h-auto md:bg-transparent
             md:gap-12 md:text-base
           `}
         >
-          <li><a href="#" onClick={() => setIsOpen(false)}>about</a></li>
-          <li><a href="#" onClick={() => setIsOpen(false)}>contact</a></li>
-          <li><a href="#" onClick={() => setIsOpen(false)}>portfolio</a></li>
+          <li className="hover:font-bold"><a href="#" onClick={() => setIsOpen(false)}>about</a></li>
+          <li className="hover:font-bold"><a href="#" onClick={() => setIsOpen(false)}>contact</a></li>
+          <li className="hover:font-bold"><a href="#" onClick={() => setIsOpen(false)}>portfolio</a></li>
         </ul>
 
         {/* LOGO */}
