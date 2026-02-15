@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Logo from "../images/logo.png";
 
 function Header() {
@@ -28,17 +29,28 @@ function Header() {
             md:gap-12 md:text-base
           `}
         >
-          <li className="hover:font-bold"><a href="#" onClick={() => setIsOpen(false)}>about</a></li>
-          <li className="hover:font-bold"><a href="#" onClick={() => setIsOpen(false)}>contact</a></li>
-          <li className="hover:font-bold"><a href="#" onClick={() => setIsOpen(false)}>portfolio</a></li>
-        </ul>
+          <li className="hover:font-bold">
+            <Link to="/about" onClick={() => setIsOpen(false)}>about</Link>
+          </li>
+
+          <li className="hover:font-bold">
+            <Link to="/contact" onClick={() => setIsOpen(false)}>contact</Link>
+          </li>
+
+          <li className="hover:font-bold">
+            <Link to="/portfolio" onClick={() => setIsOpen(false)}>portfolio</Link>
+          </li>
+
+          </ul>
 
         {/* LOGO */}
-        <img
-          src={Logo}
-          alt="logo"
-          className="w-10 md:absolute md:left-10 md:top-4"
-        />
+        <Link to="/">
+          <img
+            src={Logo}
+            alt="logo"
+            className="w-10 md:absolute md:left-10 md:top-4"
+          />
+        </Link>
 
       </div>
     </nav>
