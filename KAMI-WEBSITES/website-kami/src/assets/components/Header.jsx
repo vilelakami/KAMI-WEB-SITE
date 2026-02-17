@@ -3,46 +3,75 @@ import { Link } from 'react-router-dom';
 import Logo from '../images/logo.png';
 
 function Header() {
-  //state do react pra controlar o botão do menu
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full h-1/3 md:h-24 z-50 text-white">
-      <div className="flex items-start justify-between md:justify-center px-6 py-6 md:border-b md:border-gray-300/20 h-auto">
-        {/* BOTÃO MOBILE */}
+    <nav className="fixed top-0 left-0 w-full z-55 text-white">
+      {/* Container Principal */}
+      <div className="flex items-center justify-between px-6 py-6 md:justify-center md:border-b md:border-gray-300/20 md:h-24">
+        {/* BOTÃO MOBILE - Z-index alto para ficar acima do menu aberto */}
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="flex overflow-y-hidden items-start text-3xl md:hidden z-50"
+          className="md:hidden z-[60] w-10 h-10 flex items-center justify-center border border-white/20 rounded-md"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
         >
-          {isOpen ? '✕' : '☰'}
+          {isOpen ? (
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path
+                d="M18 6L6 18M6 6l12 12"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          ) : (
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path
+                d="M4 6h16M4 12h16M4 18h16"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          )}
         </button>
 
         {/* MENU */}
         <ul
           className={`
             ${isOpen ? 'flex' : 'hidden'}
-            flex-col items-start justify-center
-            absolute top-15 left-10 w-auto h-auto
-            gap-4 text-2xs text-shadow-lg/30 
-
-            md:static md:flex md:flex-row md:h-auto md:bg-transparent
-            md:gap-12 md:text-base
+            /* Mobile styles */
+            flex-col items-center justify-center
+            fixed inset-0 bg-black/95 z-[55]
+            gap-8 text-xl
+            
+            /* Desktop styles */
+            md:static md:flex md:flex-row md:bg-transparent
+            md:gap-12 md:text-base md:z-auto
           `}
         >
-          {/* minha nav */}
-          <li className="hover:font-bold">
+          <li className="hover:font-bold transition-all">
             <Link to="/about" onClick={() => setIsOpen(false)}>
               about
             </Link>
           </li>
-
-          <li className="hover:font-bold">
+          <li className="hover:font-bold transition-all">
             <Link to="/contact" onClick={() => setIsOpen(false)}>
               contact
             </Link>
           </li>
-
-          <li className="hover:font-bold">
+          <li className="hover:font-bold transition-all">
             <Link to="/portfolio" onClick={() => setIsOpen(false)}>
               portfolio
             </Link>
@@ -50,11 +79,11 @@ function Header() {
         </ul>
 
         {/* LOGO */}
-        <Link to="/">
+        <Link to="/" className="z-50">
           <img
             src={Logo}
             alt="logo"
-            className="w-10 md:absolute md:left-10 md:top-4"
+            className="w-10 md:absolute md:left-10 md:top-7"
           />
         </Link>
       </div>

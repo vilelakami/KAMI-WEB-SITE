@@ -6,7 +6,7 @@ import ProfileCard from './ProfileCard.jsx';
 function About() {
   return (
     //section para organizar em cima do color bends
-    <section className="absolute w-full h-auto top-35 md:top-50 left-0 overflow-hidden z-50">
+    <section className="absolute w-full h-auto top-25 md:top-50 left-0 overflow-hidden z-50">
       <div className="flex flex-col md:flex-row w-auto items-center justify-center text-white text-center md:gap-6 md:gap-x-10 text-xs md:text-xl text-shadow-lg/30">
         {/* usage do profilecard.reactbits */}
         <ProfileCard
