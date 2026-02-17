@@ -23,7 +23,7 @@ function Header() {
             ${isOpen ? "flex" : "hidden"}
             flex-col items-start justify-center
             absolute top-15 left-10 w-auto h-auto
-            gap-2 text-2xs text-shadow-lg/30 
+            gap-4 text-2xs text-shadow-lg/30 
 
             md:static md:flex md:flex-row md:h-auto md:bg-transparent
             md:gap-12 md:text-base
