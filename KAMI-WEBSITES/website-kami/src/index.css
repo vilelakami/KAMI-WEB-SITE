@@ -1,7 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@layer base{
-  *{
+@layer base {
+  html,
+  body,
+  #root {
     height: 100%;
     overflow-x: hidden;
     margin: 0;

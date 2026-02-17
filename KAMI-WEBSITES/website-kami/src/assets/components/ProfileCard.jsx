@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import './ProfileCard.css';
 
-const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
+const DEFAULT_INNER_GRADIENT =
+  'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
 
 const ANIMATION_CONFIG = {
   INITIAL_DURATION: 1200,
   INITIAL_X_OFFSET: 70,
   INITIAL_Y_OFFSET: 60,
   DEVICE_BETA_OFFSET: 20,
-  ENTER_TRANSITION_MS: 180
+  ENTER_TRANSITION_MS: 180,
 };
 
 const clamp = (v, min = 0, max = 100) => Math.min(Math.max(v, min), max);
 const round = (v, precision = 3) => parseFloat(v.toFixed(precision));
-const adjust = (v, fMin, fMax, tMin, tMax) => round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
+const adjust = (v, fMin, fMax, tMin, tMax) =>
+  round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
 
 const ProfileCardComponent = ({
   avatarUrl = '<Placeholder for avatar URL>',
@@ -34,7 +36,7 @@ const ProfileCardComponent = ({
   status = 'Online',
   contactText = 'Contact',
   showUserInfo = true,
-  onContactClick
+  onContactClick,
 }) => {
   const wrapRef = useRef(null);
   const shellRef = useRef(null);
@@ -81,13 +83,14 @@ const ProfileCardComponent = ({
         '--pointer-from-top': `${percentY / 100}`,
         '--pointer-from-left': `${percentX / 100}`,
         '--rotate-x': `${round(-(centerX / 5))}deg`,
-        '--rotate-y': `${round(centerY / 4)}deg`
+        '--rotate-y': `${round(centerY / 4)}deg`,
       };
 
-      for (const [k, v] of Object.entries(properties)) wrap.style.setProperty(k, v);
+      for (const [k, v] of Object.entries(properties))
+        wrap.style.setProperty(k, v);
     };
 
-    const step = ts => {
+    const step = (ts) => {
       if (!running) return;
       if (lastTs === 0) lastTs = ts;
       const dt = (ts - lastTs) / 1000;
@@ -101,7 +104,9 @@ const ProfileCardComponent = ({
 
       setVarsFromXY(currentX, currentY);
 
-      const stillFar = Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05;
+      const stillFar =
+        Math.abs(targetX - currentX) > 0.05 ||
+        Math.abs(targetY - currentY) > 0.05;
 
       if (stillFar || document.hasFocus()) {
         rafId = requestAnimationFrame(step);
@@ -150,7 +155,7 @@ const ProfileCardComponent = ({
         rafId = null;
         running = false;
         lastTs = 0;
-      }
+      },
     };
   }, [enableTilt]);
 
@@ -160,17 +165,17 @@ const ProfileCardComponent = ({
   };
 
   const handlePointerMove = useCallback(
-    event => {
+    (event) => {
       const shell = shellRef.current;
       if (!shell || !tiltEngine) return;
       const { x, y } = getOffsets(event, shell);
       tiltEngine.setTarget(x, y);
     },
-    [tiltEngine]
+    [tiltEngine],
   );
 
   const handlePointerEnter = useCallback(
-    event => {
+    (event) => {
       const shell = shellRef.current;
       if (!shell || !tiltEngine) return;
 
@@ -184,7 +189,7 @@ const ProfileCardComponent = ({
       const { x, y } = getOffsets(event, shell);
       tiltEngine.setTarget(x, y);
     },
-    [tiltEngine]
+    [tiltEngine],
   );
 
   const handlePointerLeave = useCallback(() => {
@@ -208,7 +213,7 @@ const ProfileCardComponent = ({
   }, [tiltEngine]);
 
   const handleDeviceOrientation = useCallback(
-    event => {
+    (event) => {
       const shell = shellRef.current;
       if (!shell || !tiltEngine) return;
 
@@ -217,16 +222,21 @@ const ProfileCardComponent = ({
 
       const centerX = shell.clientWidth / 2;
       const centerY = shell.clientHeight / 2;
-      const x = clamp(centerX + gamma * mobileTiltSensitivity, 0, shell.clientWidth);
-      const y = clamp(
-        centerY + (beta - ANIMATION_CONFIG.DEVICE_BETA_OFFSET) * mobileTiltSensitivity,
+      const x = clamp(
+        centerX + gamma * mobileTiltSensitivity,
         0,
-        shell.clientHeight
+        shell.clientWidth,
+      );
+      const y = clamp(
+        centerY +
+          (beta - ANIMATION_CONFIG.DEVICE_BETA_OFFSET) * mobileTiltSensitivity,
+        0,
+        shell.clientHeight,
       );
 
       tiltEngine.setTarget(x, y);
     },
-    [tiltEngine, mobileTiltSensitivity]
+    [tiltEngine, mobileTiltSensitivity],
   );
 
   useEffect(() => {
@@ -250,9 +260,12 @@ const ProfileCardComponent = ({
       if (anyMotion && typeof anyMotion.requestPermission === 'function') {
         anyMotion
           .requestPermission()
-          .then(state => {
+          .then((state) => {
             if (state === 'granted') {
-              window.addEventListener('deviceorientation', deviceOrientationHandler);
+              window.addEventListener(
+                'deviceorientation',
+                deviceOrientationHandler,
+              );
             }
           })
           .catch(console.error);
@@ -262,7 +275,8 @@ const ProfileCardComponent = ({
     };
     shell.addEventListener('click', handleClick);
 
-    const initialX = (shell.clientWidth || 0) - ANIMATION_CONFIG.INITIAL_X_OFFSET;
+    const initialX =
+      (shell.clientWidth || 0) - ANIMATION_CONFIG.INITIAL_X_OFFSET;
     const initialY = ANIMATION_CONFIG.INITIAL_Y_OFFSET;
     tiltEngine.setImmediate(initialX, initialY);
     tiltEngine.toCenter();
@@ -286,7 +300,7 @@ const ProfileCardComponent = ({
     handlePointerMove,
     handlePointerEnter,
     handlePointerLeave,
-    handleDeviceOrientation
+    handleDeviceOrientation,
   ]);
 
   const cardStyle = useMemo(
@@ -295,9 +309,9 @@ const ProfileCardComponent = ({
       '--grain': grainUrl ? `url(${grainUrl})` : 'none',
       '--inner-gradient': innerGradient ?? DEFAULT_INNER_GRADIENT,
       '--behind-glow-color': behindGlowColor ?? 'rgba(125, 190, 255, 0.67)',
-      '--behind-glow-size': behindGlowSize ?? '50%'
+      '--behind-glow-size': behindGlowSize ?? '50%',
     }),
-    [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize]
+    [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize],
   );
 
   const handleContactClick = useCallback(() => {
@@ -305,7 +319,11 @@ const ProfileCardComponent = ({
   }, [onContactClick]);
 
   return (
-    <div ref={wrapRef} className={`pc-card-wrapper ${className}`.trim()} style={cardStyle}>
+    <div
+      ref={wrapRef}
+      className={`pc-card-wrapper ${className}`.trim()}
+      style={cardStyle}
+    >
       {behindGlowEnabled && <div className="pc-behind" />}
       <div ref={shellRef} className="pc-card-shell">
         <section className="pc-card">
@@ -318,7 +336,7 @@ const ProfileCardComponent = ({
                 src={avatarUrl}
                 alt={`${name || 'User'} avatar`}
                 loading="lazy"
-                onError={e => {
+                onError={(e) => {
                   const t = e.target;
                   t.style.display = 'none';
                 }}
@@ -331,7 +349,7 @@ const ProfileCardComponent = ({
                         src={miniAvatarUrl || avatarUrl}
                         alt={`${name || 'User'} mini avatar`}
                         loading="lazy"
-                        onError={e => {
+                        onError={(e) => {
                           const t = e.target;
                           t.style.opacity = '0.5';
                           t.src = avatarUrl;
