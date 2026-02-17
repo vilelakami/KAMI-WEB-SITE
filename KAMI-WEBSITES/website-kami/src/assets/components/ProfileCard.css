@@ -542,7 +542,7 @@
 /* =========================
    TAMANHOS
 ========================= */
-.pc-sm { --pc-card-height: 420px; --pc-card-max-height: 420px; }
+.pc-sm { --pc-card-height: 55vh; --pc-card-max-height: 420px; }
 .pc-md { --pc-card-height: 480px; --pc-card-max-height: 480px; }
 .pc-lg { --pc-card-height: 540px; --pc-card-max-height: 540px; }
 
@@ -602,5 +602,8 @@
   z-index: 61 !important;
   mix-blend-mode: normal !important;
 }
+
+
+
 
 
