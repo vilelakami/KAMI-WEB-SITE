@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Logo from "../images/logo.png";
 
 function Header() {
+  //state do react pra controlar o botão do menu
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -29,6 +30,7 @@ function Header() {
             md:gap-12 md:text-base
           `}
         >
+          {/* minha nav */}
           <li className="hover:font-bold">
             <Link to="/about" onClick={() => setIsOpen(false)}>about</Link>
           </li>

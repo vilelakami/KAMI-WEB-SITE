@@ -2,6 +2,7 @@ import React from "react";
 
 function CTA(){
     return(
+        //meu CTA + botão pro insta
         <div className="absolute top-70 left-0 w-full h-auto text-white z-50">
             <h1 className="text-center text-3xl leading-12 md:text-6xl text-shadow-lg/30 md:leading-20">Let’s build <br></br>something together</h1>
             <div className="flex justify-center m-5 md:m-9">

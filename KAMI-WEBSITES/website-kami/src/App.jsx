@@ -14,7 +14,9 @@ import "./App.css";
 
 function App() {
   return (
+    //minha tela total
     <div className="w-screen h-screen relative overflow-hidden bg-black">
+      {/* meu fundo color bends com bg-black também do reactbits */}
       <ColorBends
         className="fixed inset-0 pointer-events-none z-1"
         colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
@@ -30,6 +32,7 @@ function App() {
         autoRotate={0}
       />
       <Header />
+      {/* o roteamento para abrir novas páginas */}
       <main>
         <Routes>
           <Route path="/" element={<><Header /><CTA /><Footer /></>}/>
