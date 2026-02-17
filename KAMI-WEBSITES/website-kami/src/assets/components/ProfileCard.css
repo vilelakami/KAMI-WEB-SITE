@@ -23,6 +23,7 @@
   --sunpillar-6: hsl(283, 100%, 73%);
   --sunpillar-clr-1: var(--sunpillar-1);
   --sunpillar-clr-2: var(--sunpillar-2);
+  --sunpillar-clr-3: var(--sunpillar-clr-3);
   --sunpillar-clr-3: var(--sunpillar-3);
   --sunpillar-clr-4: var(--sunpillar-4);
   --sunpillar-clr-5: var(--sunpillar-5);
@@ -30,11 +31,17 @@
   --card-radius: 30px;
 }
 
+/* =========================
+   WRAPPER / BEHIND GLOW
+========================= */
 .pc-card-wrapper {
   perspective: 500px;
   transform: translate3d(0, 0, 0.1px);
   position: relative;
   touch-action: none;
+  display: inline-block;
+  contain: layout paint;
+  overflow: hidden;
 }
 
 .pc-behind {
@@ -57,17 +64,28 @@
   --card-opacity: 1;
 }
 
+/* =========================
+   CARD / SHELL
+========================= */
+.pc-card-shell {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
 .pc-card {
-  height: 50svh;
-  max-height: 540px;
+  height: var(--pc-card-height, 80svh);
+  max-height: var(--pc-card-max-height, 540px);
   display: grid;
   aspect-ratio: 0.718;
   border-radius: var(--card-radius);
   position: relative;
   background-blend-mode: color-dodge, normal, normal, normal;
   animation: glow-bg 12s linear infinite;
-  box-shadow: rgba(0, 0, 0, 0.8) calc((var(--pointer-from-left) * 10px) - 3px)
-    calc((var(--pointer-from-top) * 20px) - 6px) 20px -5px;
+  box-shadow: rgba(0, 0, 0, 0.8)
+    calc((var(--pointer-from-left) * 10px) - 3px)
+    calc((var(--pointer-from-top) * 20px) - 6px)
+    20px -5px;
   transition: transform 1s ease;
   transform: translateZ(0) rotateX(0deg) rotateY(0deg);
   background: rgba(0, 0, 0, 0.9);
@@ -85,16 +103,19 @@
   transition: transform 180ms ease-out;
 }
 
-.pc-card-shell {
-  position: relative;
-  z-index: 1;
-}
-
+/* desativa interação por padrão, reativa só no UI */
 .pc-card * {
-  display: grid;
-  grid-area: 1/-1;
   border-radius: var(--card-radius);
   pointer-events: none;
+}
+
+/* camadas que ficam empilhadas */
+.pc-inside,
+.pc-shine,
+.pc-glare,
+.pc-content {
+  display: grid;
+  grid-area: 1 / -1;
 }
 
 .pc-inside {
@@ -103,16 +124,21 @@
   background-image: var(--inner-gradient);
   background-color: rgba(0, 0, 0, 0.9);
   transform: none;
+  overflow: hidden;
 }
 
+/* =========================
+   SHINE / GLARE (SUAS LUZES)
+========================= */
 .pc-shine {
   mask-image: var(--icon);
   mask-mode: luminance;
   mask-repeat: repeat;
   mask-size: 150%;
-  mask-position: top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x));
+  mask-position: top calc(200% - (var(--background-y) * 5))
+    left calc(100% - var(--background-x));
   transition: filter 0.8s ease;
-  filter: brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.5);
+  filter: brightness(.45) contrast(1.15) saturate(.35) opacity(.35);
   animation: holo-bg 18s linear infinite;
   animation-play-state: running;
   mix-blend-mode: color-dodge;
@@ -178,7 +204,7 @@
 
 .pc-card:hover .pc-shine,
 .pc-card.active .pc-shine {
-  filter: brightness(0.85) contrast(1.5) saturate(0.5);
+  filter: brightness(.55) contrast(1.25) saturate(.45) opacity(.55);
   animation-play-state: paused;
 }
 
@@ -200,7 +226,10 @@
       var(--sunpillar-2),
       var(--sunpillar-3)
     ),
-    radial-gradient(circle at var(--pointer-x) var(--pointer-y), hsl(0, 0%, 70%) 0%, hsla(0, 0%, 30%, 0.2) 90%),
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y),
+      hsl(0, 0%, 70%) 0%,
+      hsla(0, 0%, 30%, 0.2) 90%
+    ),
     var(--grain);
   background-size:
     250% 250%,
@@ -211,7 +240,9 @@
     center,
     calc(var(--pointer-x) * 0.01) calc(var(--pointer-y) * 0.01);
   background-blend-mode: color-dodge;
-  filter: brightness(calc(2 - var(--pointer-from-center))) contrast(calc(var(--pointer-from-center) + 2))
+  filter:
+    brightness(calc(2 - var(--pointer-from-center)))
+    contrast(calc(var(--pointer-from-center) + 2))
     saturate(calc(0.5 + var(--pointer-from-center)));
   mix-blend-mode: luminosity;
 }
@@ -238,39 +269,84 @@
     hsla(207, 40%, 30%, 0.8) 90%
   );
   mix-blend-mode: overlay;
-  filter: brightness(0.8) contrast(1.2);
+  filter: brightness(.55) contrast(1.05);
   z-index: 4;
+  opacity: .55;
 }
 
+/* =========================
+   AVATAR
+========================= */
 .pc-avatar-content {
-  mix-blend-mode: luminosity;
+  z-index: 1;
+  mix-blend-mode: normal;
   overflow: visible;
   transform: translateZ(2);
   backface-visibility: hidden;
 }
 
 .pc-avatar-content .avatar {
-  width: 100%;
-  position: absolute;
-  left: 50%;
-  transform-origin: 50% 100%;
-  transform: translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px)) translateZ(0)
-    scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02)) scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01));
-  bottom: -1px;
-  backface-visibility: hidden;
-  will-change: transform;
-  transition: transform 120ms ease-out;
-}
-
-.pc-avatar-content::before {
-  content: '';
   position: absolute;
   inset: 0;
-  z-index: 1;
-  backdrop-filter: none;
-  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: translateZ(0);
+  /* deixa mais “React Bits” e evita estourar */
+  filter: grayscale(.85) contrast(1.05) brightness(.92);
 }
 
+/* =========================
+   TEXTOS (FIXOS NO TOPO)
+========================= */
+.pc-content:not(.pc-avatar-content) {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  transform: none !important;
+  mix-blend-mode: normal; /* não volta luminosity aqui */
+  text-align: center;
+  overflow: hidden;
+}
+
+.pc-details {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.pc-details h3 {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 600;
+  color: rgba(255,255,255,.9);
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+.pc-details p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255,255,255,.70);
+  background: none;
+  -webkit-text-fill-color: initial;
+  position: static;        /* impede “ir pro meio” */
+  top: auto;               /* remove offsets antigos */
+  white-space: nowrap;
+}
+
+/* =========================
+   USER INFO (se usar showUserInfo)
+========================= */
 .pc-user-info {
   position: absolute;
   --ui-inset: 20px;
@@ -278,7 +354,7 @@
   bottom: var(--ui-inset);
   left: var(--ui-inset);
   right: var(--ui-inset);
-  z-index: 2;
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -287,7 +363,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: calc(max(0px, var(--card-radius) - var(--ui-inset) + var(--ui-radius-bias)));
   padding: 12px 14px;
-  pointer-events: auto;
+  pointer-events: auto; /* reativa clique no botão */
 }
 
 .pc-user-details {
@@ -333,6 +409,7 @@
 }
 
 .pc-contact-btn {
+  pointer-events: auto;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 12px 16px;
@@ -347,66 +424,38 @@
 .pc-contact-btn:hover {
   border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-1px);
-  transition: all 0.2s ease;
 }
 
-.pc-content:not(.pc-avatar-content) {
-  max-height: 100%;
-  overflow: hidden;
-  text-align: center;
-  position: relative;
-  transform: translate3d(
-    calc(var(--pointer-from-left) * -6px + 3px),
-    calc(var(--pointer-from-top) * -6px + 3px),
-    0.1px
-  );
-  z-index: 5;
-  mix-blend-mode: luminosity;
+/* =========================
+   GRAIN (GARANTIDO) - HOVER GRANULADO
+========================= */
+.pc-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index: 999;
+  pointer-events:none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-radial-gradient(circle at 0 0, rgba(255,255,255,.12) 0 1px, transparent 1px 2px),
+    repeating-radial-gradient(circle at 100% 100%, rgba(0,0,0,.18) 0 1px, transparent 1px 2px);
+  background-size: 120px 120px;
+  filter: contrast(140%) brightness(120%);
 }
 
-.pc-details {
-  width: 100%;
-  position: absolute;
-  top: 3em;
-  display: flex;
-  flex-direction: column;
+.pc-card-wrapper:hover .pc-card::after,
+.pc-card-wrapper.active .pc-card::after{
+  opacity: .95;
 }
 
-.pc-details h3 {
-  font-weight: 600;
-  margin: 0;
-  font-size: min(5svh, 3em);
-  margin: 0;
-  background-image: linear-gradient(to bottom, #fff, #6f6fbe);
-  background-size: 1em 1.5em;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
-.pc-details p {
-  font-weight: 600;
-  position: relative;
-  top: -12px;
-  white-space: nowrap;
-  font-size: 16px;
-  margin: 0 auto;
-  width: min-content;
-  background-image: linear-gradient(to bottom, #fff, #4a4ac0);
-  background-size: 1em 1.5em;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
+/* =========================
+   ANIMATIONS
+========================= */
 @keyframes glow-bg {
-  0% {
-    --bgrotate: 0deg;
-  }
-
-  100% {
-    --bgrotate: 360deg;
-  }
+  0% { --bgrotate: 0deg; }
+  100% { --bgrotate: 360deg; }
 }
 
 @keyframes holo-bg {
@@ -416,7 +465,6 @@
       0 0,
       center;
   }
-
   100% {
     background-position:
       0 var(--background-y),
@@ -425,50 +473,28 @@
   }
 }
 
+/* =========================
+   RESPONSIVO
+========================= */
 @media (max-width: 768px) {
   .pc-card {
     height: 70svh;
     max-height: 450px;
   }
 
-  .pc-details {
-    top: 2em;
-  }
-
-  .pc-details h3 {
-    font-size: min(4svh, 2.5em);
-  }
-
-  .pc-details p {
-    font-size: 14px;
-  }
+  .pc-details { top: 28px; }
+  .pc-details h3 { font-size: 32px; }
+  .pc-details p { font-size: 14px; }
 
   .pc-user-info {
     --ui-inset: 15px;
     padding: 10px 12px;
   }
-
-  .pc-mini-avatar {
-    width: 28px;
-    height: 28px;
-  }
-
-  .pc-user-details {
-    gap: 10px;
-  }
-
-  .pc-handle {
-    font-size: 13px;
-  }
-
-  .pc-status {
-    font-size: 10px;
-  }
-
-  .pc-contact-btn {
-    padding: 6px 12px;
-    font-size: 11px;
-  }
+  .pc-mini-avatar { width: 28px; height: 28px; }
+  .pc-user-details { gap: 10px; }
+  .pc-handle { font-size: 13px; }
+  .pc-status { font-size: 10px; }
+  .pc-contact-btn { padding: 6px 12px; font-size: 11px; }
 }
 
 @media (max-width: 480px) {
@@ -477,46 +503,23 @@
     max-height: 380px;
   }
 
-  .pc-details {
-    top: 1.5em;
-  }
-
-  .pc-details h3 {
-    font-size: min(3.5svh, 2em);
-  }
-
+  .pc-details { top: 22px; }
+  .pc-details h3 { font-size: 26px; }
   .pc-details p {
     font-size: 12px;
-    top: -8px;
+    top: -8px;        
+    position: static;
   }
 
   .pc-user-info {
     --ui-inset: 12px;
     padding: 8px 10px;
   }
-
-  .pc-mini-avatar {
-    width: 24px;
-    height: 24px;
-  }
-
-  .pc-user-details {
-    gap: 8px;
-  }
-
-  .pc-handle {
-    font-size: 12px;
-  }
-
-  .pc-status {
-    font-size: 9px;
-  }
-
-  .pc-contact-btn {
-    padding: 5px 10px;
-    font-size: 10px;
-    border-radius: 50px;
-  }
+  .pc-mini-avatar { width: 24px; height: 24px; }
+  .pc-user-details { gap: 8px; }
+  .pc-handle { font-size: 12px; }
+  .pc-status { font-size: 9px; }
+  .pc-contact-btn { padding: 5px 10px; font-size: 10px; border-radius: 50px; }
 }
 
 @media (max-width: 320px) {
@@ -525,38 +528,79 @@
     max-height: 320px;
   }
 
-  .pc-details h3 {
-    font-size: min(3svh, 1.5em);
-  }
+  .pc-details h3 { font-size: 22px; }
+  .pc-details p { font-size: 11px; }
 
-  .pc-details p {
-    font-size: 11px;
-  }
-
-  .pc-user-info {
-    padding: 6px 8px;
-  }
-
-  .pc-mini-avatar {
-    width: 20px;
-    height: 20px;
-  }
-
-  .pc-user-details {
-    gap: 6px;
-  }
-
-  .pc-handle {
-    font-size: 11px;
-  }
-
-  .pc-status {
-    font-size: 8px;
-  }
-
-  .pc-contact-btn {
-    padding: 4px 8px;
-    font-size: 9px;
-    border-radius: 50px;
-  }
+  .pc-user-info { padding: 6px 8px; }
+  .pc-mini-avatar { width: 20px; height: 20px; }
+  .pc-user-details { gap: 6px; }
+  .pc-handle { font-size: 11px; }
+  .pc-status { font-size: 8px; }
+  .pc-contact-btn { padding: 4px 8px; font-size: 9px; border-radius: 50px; }
 }
+
+/* =========================
+   TAMANHOS
+========================= */
+.pc-sm { --pc-card-height: 420px; --pc-card-max-height: 420px; }
+.pc-md { --pc-card-height: 480px; --pc-card-max-height: 480px; }
+.pc-lg { --pc-card-height: 540px; --pc-card-max-height: 540px; }
+
+.pc-responsive {
+  --pc-card-height: clamp(340px, 55vh, 520px);
+  --pc-card-max-height: clamp(340px, 55vh, 520px);
+}
+/* FIX DEFINITIVO: subtitle (IS student) sempre abaixo do nome e centralizado */
+.pc-card .pc-content:not(.pc-avatar-content){
+  position: absolute !important;
+  inset: 0 !important;
+  transform: none !important;
+  z-index: 50 !important;
+  mix-blend-mode: normal !important;
+  overflow: visible !important;
+}
+
+.pc-card .pc-details{
+  position: absolute !important;
+  top: 28px !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  gap: 6px !important;
+  z-index: 60 !important;
+}
+
+.pc-card .pc-details h3{
+  margin: 0 !important;
+  width: 100% !important;
+  text-align: center !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+.pc-card .pc-details p{
+  margin: 0 !important;
+  width: 100% !important;
+  display: block !important;
+  text-align: center !important;
+
+  position: static !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+
+  white-space: normal !important;   /* <- impede cortar letra */
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  color: rgba(255,255,255,.70) !important;
+
+  z-index: 61 !important;
+  mix-blend-mode: normal !important;
+}
+
+

@@ -6,7 +6,7 @@ function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 text-white">
+    <nav className="fixed top-0 left-0 w-full h-1/3 md:h-24 z-50 text-white">
       <div className="flex items-start justify-between md:justify-center px-6 py-6 md:border-b md:border-gray-300/20 h-auto">
 
         {/* BOTÃO MOBILE */}

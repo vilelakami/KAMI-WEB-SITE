@@ -15,10 +15,8 @@ import "./App.css";
 function App() {
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-black">
-      <Header />
-
       <ColorBends
-        className="fixed inset-0"
+        className="fixed inset-0 pointer-events-none z-1"
         colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
         rotation={0}
         speed={0.2}
@@ -31,13 +29,15 @@ function App() {
         transparent
         autoRotate={0}
       />
-
-      <Routes>
-        <Route path="/" element={<><Header /><CTA /><Footer /></>}/>
-        <Route path="/about" element={<> <About /> <Footer /> </>} />
-        <Route path="/contact" element={<><Contact /> <Footer /> </>} />
-        <Route path="/portfolio" element={<><Portfolio /> <Footer /> </>} />
-      </Routes>
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<><Header /><CTA /><Footer /></>}/>
+          <Route path="/about" element={<> <About /> <Footer /> </>} />
+          <Route path="/contact" element={<><Contact /> <Footer /> </>} />
+          <Route path="/portfolio" element={<><Portfolio /> <Footer /> </>} />
+        </Routes>
+      </main>
     </div>
   );
 }
