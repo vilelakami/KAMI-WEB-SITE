@@ -5,7 +5,7 @@ import Wpp from '../images/logo-wpp.png';
 
 function Contact(){
     return(
-        <main className="absolute w-full h-auto top-70 md:top-80 left-0 text-white  z-50">
+        <main className="absolute w-full h-auto top-70 md:top-80 left-0 text-white z-50">
         
                 <div className="flex w-auto h-auto items-center justify-center overflow-hidden g-2">
                     <img className="w-10 text-white" src={Insta} alt="..." />
