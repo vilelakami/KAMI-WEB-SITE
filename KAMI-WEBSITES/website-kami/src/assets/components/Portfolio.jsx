@@ -5,7 +5,7 @@ import Fundo from '../images/fundo.png';
 function Portfolio() {
   return (
     //meu portfólio, coloquei o próprio fundo do site pq estava bonito, ficou meio ruim
-    <section className="absolute w-full h-auto top-50 left-0 z-50 p-2">
+    <section className="absolute w-full top-50 left-0 z-50 p-2">
       <div className="flex flex-col w-auto items-center justify-center overflow-hidden z-50 gap-4 text-white text-shadow-lg/30">
         <img className="w-10" src={Github} alt="ícone do github" />
         <img
